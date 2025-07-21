@@ -2,9 +2,9 @@
   "name": "tutoring_center_react_app",
   "private": true,
   "version": "0.0.0",
-  "type": "module",
   "scripts": {
-    "build": "cd frontend && npm install && npm run build",
+    "build": "cd frontend && npm ci && npm run build",
+    "install": "cd frontend && npm install",
     "dev": "cd frontend && npm run dev",
     "lint": "cd frontend && npm run lint",
     "preview": "cd frontend && npm run preview"
