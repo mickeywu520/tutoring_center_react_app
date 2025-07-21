@@ -12,7 +12,7 @@ const LoginPage = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // --- Mock Login Logic ---
-    if (username === 'student' && password === 'password') {
+    if ((username === 'student' && password === 'password') || (username === 'mickey' && password === 'mickey')) {
       // In a real app, you'd get a token from the API
       const fakeToken = 'this-is-a-fake-jwt-token';
       login(fakeToken);

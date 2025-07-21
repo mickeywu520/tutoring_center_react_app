@@ -13,7 +13,7 @@ const events = [
 const DashboardPage = () => {
   return (
     <div className="bg-white p-6 md:p-8 rounded-2xl shadow-lg">
-        <h1 className="text-3xl font-bold text-brand-primary mb-6">課程行事曆</h1>
+        <h1 className="text-3xl font-bold text-primary-blue-700 mb-6">課程行事曆</h1>
         <FullCalendar
             plugins={[dayGridPlugin, timeGridPlugin]}
             initialView="timeGridWeek"
@@ -32,7 +32,7 @@ const DashboardPage = () => {
             }}
             allDayText='全天'
             height="auto" // Adjust height to fit container
-            eventColor="#4AB7E0" // Use brand-accent for events
+            eventColor="#3B82F6" // Use primary-blue-500 for events
             eventTextColor="#FFFFFF" // White text for events
             dayHeaderClassNames="bg-gray-50"
             viewClassNames="border rounded-lg"

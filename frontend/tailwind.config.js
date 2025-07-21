@@ -9,6 +9,7 @@ export default {
       colors: {
         // Original colors
         'primary-blue-700': '#1D4ED8',
+        'primary-blue-600': '#2563EB',
         'primary-blue-500': '#3B82F6',
         'primary-blue-100': '#DBEAFE',
         'secondary-emerald-700': '#047857',
