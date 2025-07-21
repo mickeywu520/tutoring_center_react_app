@@ -1,0 +1,14 @@
+@import "tailwindcss";
+
+/* Custom CSS variables for brand colors */
+@layer base {
+  :root {
+    --brand-primary: #1D4ED8;
+    --brand-secondary: #10B981;
+    --brand-accent: #4AB7E0;
+    --brand-background: #F8FAFC;
+    --brand-surface: #FFFFFF;
+    --brand-text: #1F2937;
+    --brand-text-light: #6B7280;
+  }
+}
