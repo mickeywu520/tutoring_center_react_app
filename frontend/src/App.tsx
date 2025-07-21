@@ -4,6 +4,8 @@ import DashboardPage from './pages/DashboardPage';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import Layout from './components/Layout';
 import { useIdleTimer } from './hooks/useIdleTimer';
+import TestGoogleSheetsConnection from './components/TestGoogleSheetsConnection';
+import DebugGoogleSheets from './components/DebugGoogleSheets';
 import { useEffect } from 'react';
 
 const PrivateRoute = ({ children }: { children: JSX.Element }) => {
@@ -30,6 +32,8 @@ const AppContent = () => {
   return (
     <Routes>
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/test-sheets" element={<TestGoogleSheetsConnection />} />
+      <Route path="/debug-sheets" element={<DebugGoogleSheets />} />
       <Route 
         path="/" 
         element={
