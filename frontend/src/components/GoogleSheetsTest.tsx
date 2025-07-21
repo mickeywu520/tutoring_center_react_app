@@ -16,7 +16,7 @@ const GoogleSheetsTest = () => {
       setStudents(data);
       console.log('Students data:', data);
     } catch (err) {
-      setError(`讀取學生資料失敗: ${err.message}`);
+      setError(`讀取學生資料失敗: ${err instanceof Error ? err.message : String(err)}`);
     } finally {
       setLoading(false);
     }
@@ -31,7 +31,7 @@ const GoogleSheetsTest = () => {
       setCourses(data);
       console.log('Courses data:', data);
     } catch (err) {
-      setError(`讀取課程資料失敗: ${err.message}`);
+      setError(`讀取課程資料失敗: ${err instanceof Error ? err.message : String(err)}`);
     } finally {
       setLoading(false);
     }
@@ -51,7 +51,7 @@ const GoogleSheetsTest = () => {
       console.log('Add makeup request result:', result);
       alert('補課申請新增成功！');
     } catch (err) {
-      setError(`新增補課申請失敗: ${err.message}`);
+      setError(`新增補課申請失敗: ${err instanceof Error ? err.message : String(err)}`);
     } finally {
       setLoading(false);
     }
@@ -122,7 +122,7 @@ const GoogleSheetsTest = () => {
                   <tr key={index} className="hover:bg-gray-50">
                     {Object.values(student).map((value, i) => (
                       <td key={i} className="px-4 py-2 border-b">
-                        {value}
+                        {String(value || '')}
                       </td>
                     ))}
                   </tr>
@@ -153,7 +153,7 @@ const GoogleSheetsTest = () => {
                   <tr key={index} className="hover:bg-gray-50">
                     {Object.values(course).map((value, i) => (
                       <td key={i} className="px-4 py-2 border-b">
-                        {value}
+                        {String(value || '')}
                       </td>
                     ))}
                   </tr>
