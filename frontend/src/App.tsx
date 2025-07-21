@@ -6,9 +6,8 @@ import Layout from './components/Layout';
 import { useIdleTimer } from './hooks/useIdleTimer';
 import TestGoogleSheetsConnection from './components/TestGoogleSheetsConnection';
 import DebugGoogleSheets from './components/DebugGoogleSheets';
-import { useEffect } from 'react';
 
-const PrivateRoute = ({ children }: { children: JSX.Element }) => {
+const PrivateRoute = ({ children }: { children: React.ReactElement }) => {
   const { isAuthenticated } = useAuth();
   return isAuthenticated ? children : <Navigate to="/login" />;
 };

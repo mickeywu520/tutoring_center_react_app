@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import modernGoogleSheetsService from '../services/modernGoogleSheetsService';
 
 const TestGoogleSheetsConnection = () => {

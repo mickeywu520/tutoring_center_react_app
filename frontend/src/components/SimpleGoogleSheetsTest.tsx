@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 const SimpleGoogleSheetsTest = () => {
   const [result, setResult] = useState('');

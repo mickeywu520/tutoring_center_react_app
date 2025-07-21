@@ -1,4 +1,3 @@
-import React from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { FiHome, FiCalendar, FiLogOut, FiMenu, FiX } from 'react-icons/fi';
 
