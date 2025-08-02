@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import googleSheetsService from '../services/googleSheetsService';
+import cloudflareService from '../services/cloudflareService';
 
-const GoogleSheetsTest = () => {
+const CloudflareTest = () => {
   const [students, setStudents] = useState([]);
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -12,7 +12,7 @@ const GoogleSheetsTest = () => {
     setLoading(true);
     setError('');
     try {
-      const data = await googleSheetsService.getStudents();
+      const data = await cloudflareService.getStudents();
       setStudents(data);
       console.log('Students data:', data);
     } catch (err) {
@@ -27,7 +27,7 @@ const GoogleSheetsTest = () => {
     setLoading(true);
     setError('');
     try {
-      const data = await googleSheetsService.getCourses();
+      const data = await cloudflareService.getCourses();
       setCourses(data);
       console.log('Courses data:', data);
     } catch (err) {
@@ -42,7 +42,7 @@ const GoogleSheetsTest = () => {
     setLoading(true);
     setError('');
     try {
-      const result = await googleSheetsService.addMakeupRequest(
+      const result = await cloudflareService.addMakeupRequest(
         '1', // 學生ID
         '1', // 原課程ID
         '2', // 補課課程ID
@@ -59,7 +59,7 @@ const GoogleSheetsTest = () => {
 
   return (
     <div className="p-6 max-w-4xl mx-auto">
-      <h1 className="text-2xl font-bold mb-6">Google Sheets API 測試</h1>
+      <h1 className="text-2xl font-bold mb-6">Cloudflare API 測試</h1>
       
       {/* 錯誤訊息 */}
       {error && (
@@ -171,15 +171,14 @@ const GoogleSheetsTest = () => {
           請確保已設定以下環境變數：
         </p>
         <ul className="text-sm text-gray-600 mt-2">
-          <li>• REACT_APP_GOOGLE_SHEETS_ID</li>
-          <li>• REACT_APP_GOOGLE_API_KEY</li>
+          <li>• REACT_APP_API_BASE_URL</li>
         </ul>
         <p className="text-sm text-gray-600 mt-2">
-          並且 Google Sheets 已正確設定權限和工作表結構。
+          並且 Cloudflare Workers API 已正確部署和運行。
         </p>
       </div>
     </div>
   );
 };
 
-export default GoogleSheetsTest;
+export default CloudflareTest;

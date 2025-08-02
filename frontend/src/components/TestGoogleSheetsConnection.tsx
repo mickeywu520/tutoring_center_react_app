@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import modernGoogleSheetsService from '../services/modernGoogleSheetsService';
+import cloudflareService from '../services/cloudflareService';
 
 const TestGoogleSheetsConnection = () => {
   const [result, setResult] = useState('');
@@ -11,39 +11,39 @@ const TestGoogleSheetsConnection = () => {
     setResult('正在測試連接...\n');
 
     try {
-      // 測試讀取 Students 工作表
-      console.log('開始測試 Google Sheets 連接...');
-      const students = await modernGoogleSheetsService.getStudents();
+      // 測試讀取學生資料
+      console.log('開始測試 Cloudflare API 連接...');
+      const students = await cloudflareService.getStudents();
       
-      setResult(prev => prev + `✅ Students 工作表連接成功！\n取得 ${students.length} 筆資料\n\n資料內容：\n${JSON.stringify(students, null, 2)}`);
+      setResult(prev => prev + `✅ 學生資料連接成功！\n取得 ${students.length} 筆資料\n\n資料內容：\n${JSON.stringify(students, null, 2)}`);
       
     } catch (error) {
       console.error('連接測試失敗:', error);
-      setResult(prev => prev + `❌ 連接失敗：${error.message}\n\n請檢查：\n1. Google Sheets 是否已設為公開\n2. 是否有 Students 工作表\n3. 工作表是否有資料`);
+      setResult(prev => prev + `❌ 連接失敗：${error.message}\n\n請檢查：\n1. Cloudflare Workers 是否已正確部署\n2. API_BASE_URL 是否正確設定\n3. 網路連線是否正常`);
     } finally {
       setLoading(false);
     }
   };
 
-  // 測試所有工作表
+  // 測試所有資料
   const testAllSheets = async () => {
     setLoading(true);
-    setResult('正在測試所有工作表...\n\n');
+    setResult('正在測試所有資料...\n\n');
 
-    const sheets = [
+    const testData = [
       { name: 'Students', method: 'getStudents' },
       { name: 'Courses', method: 'getCourses' },
       { name: 'MakeupRecords', method: 'getMakeupRecords' },
       { name: 'MealRecords', method: 'getMealRecords' }
     ];
 
-    for (const sheet of sheets) {
+    for (const data of testData) {
       try {
-        console.log(`測試 ${sheet.name} 工作表...`);
-        const data = await modernGoogleSheetsService[sheet.method]();
-        setResult(prev => prev + `✅ ${sheet.name}: 成功 (${data.length} 筆資料)\n`);
+        console.log(`測試 ${data.name} 資料...`);
+        const result = await cloudflareService[data.method]();
+        setResult(prev => prev + `✅ ${data.name}: 成功 (${result.length} 筆資料)\n`);
       } catch (error) {
-        setResult(prev => prev + `❌ ${sheet.name}: 失敗 - ${error.message}\n`);
+        setResult(prev => prev + `❌ ${data.name}: 失敗 - ${error.message}\n`);
       }
     }
 
@@ -67,16 +67,16 @@ const TestGoogleSheetsConnection = () => {
 
   return (
     <div className="p-6 max-w-4xl mx-auto">
-      <h1 className="text-3xl font-bold mb-6 text-center">🎉 Google Sheets 連接測試</h1>
+      <h1 className="text-3xl font-bold mb-6 text-center">🎉 Cloudflare API 連接測試</h1>
       
       {/* 設定確認 */}
       <div className="bg-green-100 p-4 rounded-lg mb-6">
         <h2 className="text-lg font-semibold mb-2">✅ 設定確認</h2>
         <ul className="text-sm space-y-1">
-          <li>📊 Google Sheets: tutoring_center</li>
-          <li>🔗 Sheet ID: 1nzxmByLfUDs34kZavPQgK0Iyyp3Bx4i-PT6-5bDstRk</li>
-          <li>🔓 權限: 知道連結的人 (編輯者)</li>
-          <li>📋 工作表: Students, Courses, MakeupRecords, MealRecords</li>
+          <li>📊 Cloudflare Workers API</li>
+          <li>🔗 API_BASE_URL: 請在 .env 文件中設定</li>
+          <li>🔒 JWT 認證: 已啟用</li>
+          <li>📋 資料表: Users, Courses, Schedules, Reschedules</li>
         </ul>
       </div>
 
@@ -119,9 +119,9 @@ const TestGoogleSheetsConnection = () => {
       <div className="mt-6 p-4 bg-blue-100 rounded-lg">
         <h3 className="font-semibold mb-2">💡 說明</h3>
         <p className="text-sm">
-          我們使用 Google Visualization API 來讀取您的 Google Sheets 資料，
-          這種方式不需要 API 金鑰，只要 Google Sheets 設為公開即可。
-          如果需要寫入功能，我們可以後續加入 Google Apps Script 或 API 金鑰。
+          我們現在使用 Cloudflare Workers 作為後端 API，
+          資料存儲在 Cloudflare D1 資料庫中，並使用 JWT 進行身份驗證。
+          請確保已在 .env 文件中正確設定 REACT_APP_API_BASE_URL。
         </p>
       </div>
     </div>

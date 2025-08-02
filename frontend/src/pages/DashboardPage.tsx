@@ -1,15 +1,62 @@
+import React, { useState, useEffect } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
-
-// Mock course data
-const events = [
-  { title: '數學 A 班', start: '2025-07-21T10:00:00', end: '2025-07-21T12:00:00' },
-  { title: '物理實驗', start: '2025-07-22T14:00:00', end: '2025-07-22T16:00:00' },
-  { title: '英文會話', start: '2025-07-24T19:00:00', end: '2025-07-24T20:30:00' },
-];
+import cloudflareService from '../services/cloudflareService';
 
 const DashboardPage = () => {
+  const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    const fetchSchedule = async () => {
+      try {
+        const scheduleData = await cloudflareService.getSchedule();
+        
+        // 轉換數據格式以適應 FullCalendar
+        const calendarEvents = scheduleData.map(item => ({
+          id: item.id,
+          title: item.course_name,
+          start: item.start_time,
+          end: item.end_time,
+          extendedProps: {
+            courseId: item.course_id,
+            studentId: item.student_id,
+            status: item.status,
+            room: item.room
+          }
+        }));
+        
+        setEvents(calendarEvents);
+        setLoading(false);
+      } catch (err) {
+        setError('獲取課表數據失敗: ' + err.message);
+        setLoading(false);
+      }
+    };
+
+    fetchSchedule();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="bg-white p-6 md:p-8 rounded-2xl shadow-lg">
+        <h1 className="text-3xl font-bold text-primary-blue-700 mb-6">課程行事曆</h1>
+        <div className="text-center py-8">載入中...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="bg-white p-6 md:p-8 rounded-2xl shadow-lg">
+        <h1 className="text-3xl font-bold text-primary-blue-700 mb-6">課程行事曆</h1>
+        <div className="text-center py-8 text-red-600">{error}</div>
+      </div>
+    );
+  }
+
   return (
     <div className="bg-white p-6 md:p-8 rounded-2xl shadow-lg">
         <h1 className="text-3xl font-bold text-primary-blue-700 mb-6">課程行事曆</h1>

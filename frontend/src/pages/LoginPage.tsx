@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import cloudflareService from '../services/cloudflareService';
 
 const LoginPage = () => {
   const [username, setUsername] = useState('');
@@ -9,18 +10,20 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // --- Mock Login Logic ---
-    if ((username === 'student' && password === 'password') || (username === 'mickey' && password === 'mickey')) {
-      // In a real app, you'd get a token from the API
-      const fakeToken = 'this-is-a-fake-jwt-token';
-      login(fakeToken);
+    
+    try {
+      // 使用 Cloudflare 服務進行登入
+      const data = await cloudflareService.login(username, password);
+      
+      // 登入成功，保存 token 並導航到主頁
+      login(data.token);
       navigate('/');
-    } else {
-      setError('帳號或密碼錯誤');
+    } catch (err) {
+      // 登入失敗，顯示錯誤信息
+      setError(err.message || '登入失敗，請稍後再試');
     }
-    // --- End Mock Login Logic ---
   };
 
   return (

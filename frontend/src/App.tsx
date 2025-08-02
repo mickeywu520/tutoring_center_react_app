@@ -4,8 +4,9 @@ import DashboardPage from './pages/DashboardPage';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import Layout from './components/Layout';
 import { useIdleTimer } from './hooks/useIdleTimer';
-import TestGoogleSheetsConnection from './components/TestGoogleSheetsConnection';
-import DebugGoogleSheets from './components/DebugGoogleSheets';
+import TestCloudflareConnection from './components/TestCloudflareConnection';
+import DebugCloudflare from './components/DebugCloudflare';
+import CloudflareTest from './components/CloudflareTest';
 
 const PrivateRoute = ({ children }: { children: React.ReactElement }) => {
   const { isAuthenticated } = useAuth();
@@ -31,8 +32,9 @@ const AppContent = () => {
   return (
     <Routes>
       <Route path="/login" element={<LoginPage />} />
-      <Route path="/test-sheets" element={<TestGoogleSheetsConnection />} />
-      <Route path="/debug-sheets" element={<DebugGoogleSheets />} />
+      <Route path="/test-sheets" element={<TestCloudflareConnection />} />
+      <Route path="/test-cloudflare" element={<CloudflareTest />} />
+      <Route path="/debug-sheets" element={<DebugCloudflare />} />
       <Route 
         path="/" 
         element={

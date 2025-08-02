@@ -18,6 +18,9 @@ build/
 .env.test.local
 .env.production.local
 
+# Cloudflare Workers
+api/wrangler.toml
+
 # IDE and Editor files
 .vscode/
 .idea/

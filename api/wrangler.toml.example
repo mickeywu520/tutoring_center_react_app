@@ -1,0 +1,14 @@
+name = "tutoring-center-api"
+main = "src/index.js"
+compatibility_date = "2024-09-26"
+
+# 用於 JWT 簽名的密鑰，請替換為您自己的密鑰
+[vars]
+JWT_SECRET = "your-jwt-secret-key"
+
+# Cloudflare D1 資料庫配置
+# 請替換為您自己的資料庫名稱和 ID
+[[d1_databases]]
+binding = "DB"
+database_name = "your-database-name"
+database_id = "your-d1-database-id"
