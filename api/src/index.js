@@ -10,7 +10,7 @@ const router = Router();
 router.all('*', withContent);
 
 // 中間件：驗證JWT Token（用於需要認證的路由）
-const withAuth = async (request) => {
+const withAuth = async (request, env) => {
   const authHeader = request.headers.get('Authorization');
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
     return new Response('Unauthorized', { status: 401 });
@@ -18,7 +18,7 @@ const withAuth = async (request) => {
 
   const token = authHeader.substring(7);
   try {
-    const payload = await verifyJWT(token, JWT_SECRET);
+    const payload = await verifyJWT(token, env.JWT_SECRET);
     request.user = payload;
   } catch (e) {
     return new Response('Invalid token', { status: 401 });
@@ -168,7 +168,7 @@ router.post('/api/reschedule', withAuth, async ({ content, user }, env) => {
   }
 
   // 開始事務處理
-  const batch = env.DB.batch([
+  const statements = [
     // 更新原課程狀態為"已註銷"
     env.DB.prepare(
       'UPDATE schedules SET status = ? WHERE student_id = ? AND course_id = ? AND status = ?'
@@ -183,9 +183,9 @@ router.post('/api/reschedule', withAuth, async ({ content, user }, env) => {
     env.DB.prepare(
       'UPDATE schedules SET student_id = ?, status = ? WHERE course_id = ? AND student_id IS NULL'
     ).bind(user.id, 'scheduled', rescheduledCourseId)
-  ]);
+  ];
 
-  const results = await env.DB.batch(batch);
+  const results = await env.DB.batch(statements);
   
   // 檢查所有操作是否成功
   const allSuccess = results.every(result => result.success);
@@ -212,9 +212,6 @@ router.all('*', () => new Response('Not Found', { status: 404 }));
 // 主處理函數
 export default {
   async fetch(request, env) {
-    // 設置全局環境變量
-    global.JWT_SECRET = env.JWT_SECRET;
-    
     return router.handle(request, env).catch(err => {
       console.error('Error:', err);
       return new Response('Internal Server Error', { status: 500 });

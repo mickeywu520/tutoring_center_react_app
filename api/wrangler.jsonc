@@ -1,0 +1,16 @@
+{
+  "name": "tutoring-center-api",
+  "main": "src/index.js",
+  "compatibility_date": "2024-09-26",
+  "compatibility_flags": ["nodejs_compat"],
+  "vars": {
+    "JWT_SECRET": "tutor_jwt_secret_key"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "tutoring-center-db",
+      "database_id": "b83d50b5-85c3-4baa-900b-7744f5bdb29f"
+    }
+  ]
+}
