@@ -127,4 +127,8 @@ npm run preview
 1. 確保用戶名和密碼正確
 2. 檢查用戶是否已正確添加到 D1 資料庫
 3. 檢查密碼哈希是否正確生成
+
+## 測試
+
+有關如何測試本系統的詳細指南，請參閱 [`TESTING_GUIDE.md`](../TESTING_GUIDE.md) 文件。
 </content>

@@ -6,6 +6,47 @@ import { hashPassword, verifyPassword } from './crypto.js';
 // 創建路由器
 const router = Router();
 
+// CORS 中間件
+const cors = (request, env) => {
+  const origin = request.headers.get('Origin');
+  const allowedOrigins = [
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+    // 可以添加其他允許的源
+  ];
+  
+  if (origin && allowedOrigins.includes(origin)) {
+    request.corsHeaders = {
+      'Access-Control-Allow-Origin': origin,
+      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+      'Access-Control-Max-Age': '86400', // 24 hours
+    };
+  } else {
+    request.corsHeaders = {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+      'Access-Control-Max-Age': '86400', // 24 hours
+    };
+  }
+};
+
+// 處理預檢請求
+router.options('*', (request) => {
+  const headers = request.corsHeaders || {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+    'Access-Control-Max-Age': '86400',
+  };
+  
+  return new Response(null, {
+    status: 204,
+    headers,
+  });
+});
+
 // 中間件：解析JSON內容
 router.all('*', withContent);
 
@@ -212,7 +253,24 @@ router.all('*', () => new Response('Not Found', { status: 404 }));
 // 主處理函數
 export default {
   async fetch(request, env) {
-    return router.handle(request, env).catch(err => {
+    // 處理CORS
+    cors(request, env);
+    
+    return router.handle(request, env).then(response => {
+      // 添加CORS頭到響應
+      if (request.corsHeaders) {
+        const headers = new Headers(response.headers);
+        Object.entries(request.corsHeaders).forEach(([key, value]) => {
+          headers.set(key, value);
+        });
+        return new Response(response.body, {
+          status: response.status,
+          statusText: response.statusText,
+          headers,
+        });
+      }
+      return response;
+    }).catch(err => {
       console.error('Error:', err);
       return new Response('Internal Server Error', { status: 500 });
     });
